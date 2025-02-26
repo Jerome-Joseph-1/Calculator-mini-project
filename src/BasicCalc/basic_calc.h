@@ -1,6 +1,9 @@
 #ifndef BASIC_CALC_H
 #define BASIC_CALC_H
 
+#include <iostream>
+#include <cmath>
+
 namespace basic_calc {
     class BasicCalc {
         public:
