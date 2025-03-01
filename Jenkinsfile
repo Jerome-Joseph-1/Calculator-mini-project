@@ -8,24 +8,28 @@ pipeline {
             }
         }
         
-        stage('Docker Build') {
-            steps {
-                // This builds the Docker image using your Dockerfile
-                // The Dockerfile should contain all build steps including cmake
-                sh 'docker build -t jeromejoseph/calculator:latest .'
+        stage('Docker Build and Test') {
+            agent {
+                docker {
+                    image 'docker:dind'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
             }
-        }
-        
-        stage('Test in Container') {
             steps {
-                // Run tests inside the container we just built
+                sh 'docker build -t jeromejoseph/calculator:latest .'
                 sh 'docker run --rm jeromejoseph/calculator /app/build/calculator_test'
             }
         }
         
         stage('Docker Push') {
+            agent {
+                docker {
+                    image 'docker:dind'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-credz',
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials',
                                                 usernameVariable: 'DOCKER_USERNAME',
                                                 passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh '''
