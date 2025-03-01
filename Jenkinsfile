@@ -8,36 +8,25 @@ pipeline {
             }
         }
         
-        stage('Build') {
-            steps {
-                sh '''
-                mkdir -p build
-                cd build
-                cmake ..
-                make
-                '''
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                sh '''
-                cd build
-                ./calculator_test
-                '''
-            }
-        }
-        
         stage('Docker Build') {
             steps {
+                // This builds the Docker image using your Dockerfile
+                // The Dockerfile should contain all build steps including cmake
                 sh 'docker build -t jeromejoseph/calculator:latest .'
+            }
+        }
+        
+        stage('Test in Container') {
+            steps {
+                // Run tests inside the container we just built
+                sh 'docker run --rm jeromejoseph/calculator /app/build/calculator_test'
             }
         }
         
         stage('Docker Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
-                                                usernameVariable: 'DOCKER_USERNAME', 
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials',
+                                                usernameVariable: 'DOCKER_USERNAME',
                                                 passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh '''
                     echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
@@ -45,6 +34,12 @@ pipeline {
                     '''
                 }
             }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
         }
     }
 }
