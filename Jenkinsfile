@@ -30,7 +30,7 @@ pipeline {
         
         stage('Docker Build') {
             steps {
-                sh 'docker build -t jerome-joseph/calculator:latest .'
+                sh 'docker build -t jeromejoseph/calculator:latest .'
             }
         }
         
@@ -41,7 +41,7 @@ pipeline {
                                                 passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh '''
                     echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                    docker push jerome-joseph/calculator:latest
+                    docker push jeromejoseph/calculator:latest
                     '''
                 }
             }
