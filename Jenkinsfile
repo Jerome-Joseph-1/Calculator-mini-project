@@ -27,28 +27,29 @@ pipeline {
                 }
             }
         }
-    }
-
-    stage('Deploy with Ansible') {
-        steps {
-            withCredentials([
-                sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'ANSIBLE_SSH_KEY')
-            ]) {
-                sh '''
-                    cp $ANSIBLE_SSH_KEY /tmp/ansible_key
-                    chmod 600 /tmp/ansible_key
-                    
-                    ssh -i /tmp/ansible_key -o StrictHostKeyChecking=no root@192.168.2.180 "
-                        cd ~/ansible && 
-                        ansible-playbook deploy-calculator.yml
-                    "
-                    
-                    # Clean up
-                    rm /tmp/ansible_key
-                '''
+        
+        stage('Deploy with Ansible') {
+            steps {
+                withCredentials([
+                    sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'ANSIBLE_SSH_KEY')
+                ]) {
+                    sh '''
+                        cp $ANSIBLE_SSH_KEY /tmp/ansible_key
+                        chmod 600 /tmp/ansible_key
+                        
+                        ssh -i /tmp/ansible_key -o StrictHostKeyChecking=no root@192.168.2.180 "
+                            cd ~/ansible && 
+                            ansible-playbook deploy-calculator.yml
+                        "
+                        
+                        # Clean up
+                        rm /tmp/ansible_key
+                    '''
+                }
             }
         }
     }
+
    
     post {
         always {
