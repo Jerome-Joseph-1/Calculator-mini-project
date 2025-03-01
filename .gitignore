@@ -1,3 +1,5 @@
 main
+caluclator
 *.sh
 .vscode 
+build/*
