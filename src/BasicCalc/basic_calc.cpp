@@ -37,7 +37,7 @@ void basic_calc::BasicCalc::menu() {
     long long n;
 
     std::cout << "\n-----------------MENU (2)----------------" << std::endl;
-    std::cout << "1. Square Root of a number" << std::endl;
+    std::cout << "1. Square Root of a numbers" << std::endl;
     std::cout << "2. Factorial" << std::endl;
     std::cout << "3. Natural Log" << std::endl;
     std::cout << "4. Power" << std::endl;
