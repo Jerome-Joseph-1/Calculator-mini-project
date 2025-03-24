@@ -49,10 +49,10 @@ int main() {
     });
 
     // ADDING INVALID TEST
-    tf.addTest("5^0 should be 1", [](TestFramework& tf) {
-        basic_calc::BasicCalc calc;
-        return tf.expectEqual(calc.pow(5.0, 0.0), 12.0);
-    });
+    // tf.addTest("5^0 should be 1", [](TestFramework& tf) {
+    //     basic_calc::BasicCalc calc;
+    //     return tf.expectEqual(calc.pow(5.0, 0.0), 12.0);
+    // });
     
     tf.runTests();
     return tf.getExitCode();
